@@ -39,7 +39,7 @@ module.exports = {
     const query =
       "assignee = "+ user + " AND created >= startOfMonth(-2M) AND created <= endOfMonth()";
     const token =
-      "ATATT3xFfGF0xGmhPKDtI7C-TKs1F8MgeflrbLFxjXAyQ4g-Y3g0YBxkVsb_DIWbN4RD0IaZVUkCAeOsegkhE39jMoyfilMhWi5ahfWJx5QOTYRhyeeTscstxywywI6LMQfgn1nPG21fiOST--jRn5yAKSOCqML-C6O2StCJmfRjVZvZu3qMKsI=45462102";
+      "ATATT3xFfGF0jmsKbzD0U2180hM3QBP-w3fptU_UFlk4tI6gCLxapriu_EHx10dr0kY_ftSYFHO7AG-3BuXkvoDrE4PWsdcsfE9mJyXLSBNB9xHLWsXSEU70G-Q6nRWJETgfcX2H-OIL-_6w2LggdVw0ioEkghQdkJO59aIR58sSpKdeHCqYdR8=074EE5A3";
     const url = "https://koibanx.atlassian.net/rest/api/3/search?jql=" + query+"&maxResults=150";
     const response = await axios({
       method: "get",
