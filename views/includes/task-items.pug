@@ -1,0 +1,27 @@
+div
+  p.text-lg.text-center La semana actual es #{actual}
+  p.text-lg.text-center.mt-8 Tareas sin clasificar #{unclasificated.length}
+  div.flex.justify-center.mt-2
+    each task in unclasificated
+      a.px-2.py-2.border.bg-yellow-200.ml-2.text-xs(href=`https://koibanx.atlassian.net/browse/${task.key}` target="_blank_") 
+        span #{task.key}
+        span.text-red-500.ml-2 #{task.storyPoint}
+  div(class="mx-auto w-2/3 flex justify-center mt-10")
+    table.w-full
+      theader
+        tr
+          td Mes
+          td Semana
+          td Story points
+          td Issues
+      tbody
+        each week,index in year
+          tr(class=`${index+1===actual?"bg-indigo-100":""}`)
+            td #{week.month.inicio} - #{week.month.final} 
+            td #{index+1} 
+            td #{week.total}
+            td
+              each task in week.issues
+                a.px-2.py-2.border.ml-2.text-xs.rounded-md(class=`${task.resolution==='Done'?"bg-green-300":"bg-orange-300"}` href=`https://koibanx.atlassian.net/browse/${task.key}` target="_blank_") 
+                  span #{task.key}
+                  span.font-bold.ml-2 #{task.storyPoint}

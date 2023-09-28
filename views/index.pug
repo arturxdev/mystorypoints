@@ -1,0 +1,22 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1')
+    title My story points
+    script(src="https://cdn.tailwindcss.com")
+    link(rel='stylesheet' href='/css/index.css')
+  body.py-12.px-10
+    section
+      header
+        p.text-2xl.font-bold.text-center My story points
+        div.flex.justify-center.mt-5
+          form(hx-get="/tasks", hx-target="#todo-list", hx-swap="outerHTML", _="on htmx:afterOnLoad set #txtTodo.value to ''")
+            input#txtTodo.new-todo(name="userId",placeholder='Jira userId', autofocus='')
+            button.px-5.py-1.bg-indigo-400.text-white.font-bold Buscar
+      #todo-list
+        include includes/task-items
+
+    script(src='https://unpkg.com/htmx.org@1.3.1')
+    script(src='https://unpkg.com/hyperscript.org@0.0.5')
+
