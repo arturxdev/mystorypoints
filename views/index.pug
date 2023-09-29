@@ -6,14 +6,22 @@ html(lang='en')
     title My story points
     script(src="https://cdn.tailwindcss.com")
     link(rel='stylesheet' href='/css/index.css')
-  body.py-12.px-10
+  body
     section
-      header
-        p.text-2xl.font-bold.text-center My story points
+      header.w-full.bg-indigo-500.py-3.px-5.text-white.text-left
+        p.text-xl.font-bold My story points
+      div
         div.flex.justify-center.mt-5
-          form(hx-get="/tasks", hx-target="#todo-list", hx-swap="outerHTML", _="on htmx:afterOnLoad set #txtTodo.value to ''")
-            input#txtTodo.new-todo(name="userId",placeholder='Jira userId', autofocus='')
-            button.px-5.py-1.bg-indigo-400.text-white.font-bold Buscar
+          form.flex.justify-center(hx-get="/tasks", hx-target="#todo-list", hx-swap="outerHTML", _="on htmx:afterOnLoad set #txtTodo.value to ''")
+            input#txtTodo(class="px-3 py-2 border-5 focus:border-rose-500" name="userId",placeholder='Jira userId', autofocus='')
+            div.block.self-center
+              label.ml-4 1M
+              input(type="radio" name="months" value="1")
+              label.ml-2 2M
+              input(type="radio" name="months" value="2")
+              label.ml-2 3M
+              input(type="radio" name="months" value="3")
+            button.ml-4.px-5.py-2.bg-indigo-500.rounded-md.text-white.font-bold Buscar
       #todo-list
         include includes/task-items
 

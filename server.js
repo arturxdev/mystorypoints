@@ -52,9 +52,8 @@ app.post("/todos", (req, res) => {
 });
 
 app.get("/tasks", async (req, res) => {
-  const { userId } = req.query;
-  console.log(userId)
-  const tasks = await getTasks(userId);
+  const { userId,months } = req.query;
+  const tasks = await getTasks(userId,months);
   let year = createYear();
   let unclasificated = [];
   const actual = dayjs().week();
@@ -67,7 +66,6 @@ app.get("/tasks", async (req, res) => {
       unclasificated.push(tasks[index]);
     }
   }
-  console.log(year)
   let template = pug.compileFile("views/includes/task-items.pug");
   let markup = template({ year, actual, unclasificated });
   res.send(markup);

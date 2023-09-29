@@ -35,9 +35,9 @@ function obtenerFechasSemanaDelAño(numeroSemana, año) {
   };
 }
 module.exports = {
-  getTasks: async (user) => {
+  getTasks: async (user,months) => {
     const query =
-      "assignee = "+ user + " AND created >= startOfMonth(-2M) AND created <= endOfMonth()";
+      `assignee = ${user} AND created >= startOfMonth(-${months}M) AND created <= endOfMonth()`;
     const token =
       "ATATT3xFfGF0jmsKbzD0U2180hM3QBP-w3fptU_UFlk4tI6gCLxapriu_EHx10dr0kY_ftSYFHO7AG-3BuXkvoDrE4PWsdcsfE9mJyXLSBNB9xHLWsXSEU70G-Q6nRWJETgfcX2H-OIL-_6w2LggdVw0ioEkghQdkJO59aIR58sSpKdeHCqYdR8=074EE5A3";
     const url = "https://koibanx.atlassian.net/rest/api/3/search?jql=" + query+"&maxResults=150";
