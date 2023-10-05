@@ -1,17 +1,20 @@
-body{
-  background-color: #F1F5FB;
+body {
+  background-color: #f1f5fb;
 }
 
-thead{
+tbody {
   padding: 0 20px;
 }
-td{
+td {
   padding: 10px 5px;
 }
 tbody tr {
   background-color: white;
 }
 
-tbody tr:nth-child(even){
-  background-color: #F9FAFE;
+tbody tr:nth-child(even) {
+  background-color: #f9fafe;
+}
+th {
+  padding: 10px 5px;
 }

@@ -34,24 +34,46 @@ function obtenerFechasSemanaDelAño(numeroSemana, año) {
     final: dayjs(fechaFinalSemana).format("MMM-DD"),
   };
 }
+function semanasFaltantesParaFinDeAnio(fecha) {
+  // Obtiene el año de la fecha proporcionada
+  const año = fecha.getFullYear();
+
+  // Crea una fecha para el 31 de diciembre de ese año a las 23:59:59
+  const finDeAño = new Date(año, 11, 31, 23, 59, 59);
+
+  // Calcula la diferencia en milisegundos entre la fecha proporcionada y el fin de año
+  const diferenciaEnMilisegundos = finDeAño - fecha;
+
+  // Calcula la diferencia en semanas
+  const semanasFaltantes = Math.ceil(
+    diferenciaEnMilisegundos / (7 * 24 * 60 * 60 * 1000),
+  );
+
+  return semanasFaltantes;
+}
 module.exports = {
-  getTasks: async (user,months) => {
-    const query =
-      `assignee = ${user} AND created >= startOfMonth(-${months}M) AND created <= endOfMonth()`;
-    const token =
-      "ATATT3xFfGF0jmsKbzD0U2180hM3QBP-w3fptU_UFlk4tI6gCLxapriu_EHx10dr0kY_ftSYFHO7AG-3BuXkvoDrE4PWsdcsfE9mJyXLSBNB9xHLWsXSEU70G-Q6nRWJETgfcX2H-OIL-_6w2LggdVw0ioEkghQdkJO59aIR58sSpKdeHCqYdR8=074EE5A3";
-    const url = "https://koibanx.atlassian.net/rest/api/3/search?jql=" + query+"&maxResults=150";
+  getTasks: async (user, months, token, jiraUser) => {
+    const url = "https://koibanx.atlassian.net/rest/api/3/search";
+    const params = {
+      jql:
+        `assignee = ${user} AND created >= startOfMonth(-${months}M) AND created <= endOfMonth()`,
+      maxResults: 150,
+      // fields: "summary,description,customfield_xxxxx", // Reemplaza con el ID real de tu campo de Story Points
+      orderBy: "created DESC", // Ordenar por fecha de creación en orden descendente
+    };
+    const headers = {
+      "Authorization": `Basic ${
+        Buffer.from(
+          jiraUser + ":" + token,
+        ).toString("base64")
+      }`,
+      "Accept": "application/json",
+    };
     const response = await axios({
       method: "get",
       url,
-      headers: {
-        "Authorization": `Basic ${
-          Buffer.from(
-            "arturo.guerrero@koibanx.com:" + token,
-          ).toString("base64")
-        }`,
-        "Accept": "application/json",
-      },
+      headers,
+      params,
     });
     const tasks = response.data.issues.map((issue) => {
       return {
@@ -69,14 +91,15 @@ module.exports = {
     const numeroSemanas = obtenerCantidadDeSemanasEnMes(month, year);
     return createWeeks(numeroSemanas);
   },
-  createYear() {
-    let weeks = [];
-    for (let index = 0; index < 52; index++) {
-      weeks.push({
+  createYear(date) {
+    const dias = semanasFaltantesParaFinDeAnio(date);
+    let weeks = {};
+    for (let index = 52 - dias; index <= 52; index++) {
+      weeks[index.toString()] = {
         month: obtenerFechasSemanaDelAño(index + 1, 2023),
         total: 0,
         issues: [],
-      });
+      };
     }
     return weeks;
   },

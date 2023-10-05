@@ -18,48 +18,36 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, "assets")));
 
-let todos = [
-  {
-    id: uuid(),
-    name: "Taste htmx",
-    done: true,
-  },
-  {
-    id: uuid(),
-    name: "Buy a unicorn",
-    done: false,
-  },
-];
-
 app.get("/", async (req, res) => {
-  let year = createYear();
   let unclasificated = [];
   const actual = dayjs().week();
-  res.render("index", { todos, year, actual, unclasificated });
-});
-
-app.post("/todos", (req, res) => {
-  const { todo } = req.body;
-  const newTodo = {
-    id: uuid(),
-    name: todo,
-    done: false,
-  };
-  todos.push(newTodo);
-  let template = pug.compileFile("views/includes/todo-item.pug");
-  let markup = template({ todo: newTodo });
-  res.send(markup);
+  res.render("index", { actual, unclasificated });
 });
 
 app.get("/tasks", async (req, res) => {
-  const { userId,months } = req.query;
-  const tasks = await getTasks(userId,months);
-  let year = createYear();
-  let unclasificated = [];
+  let years = {};
+  const { userId, months, token, jiraUser } = req.query;
+  const tasks = await getTasks(userId, months, token, jiraUser);
   const actual = dayjs().week();
+  let minor = dayjs();
+  let major = dayjs();
+  let unclasificated = [];
+  for (let index = 0; index < tasks.length; index++) {
+    if (!tasks[index].endDate) continue;
+    const issueDate = new dayjs(tasks[index].endDate);
+    if (issueDate.isBefore(minor, "week")) minor = issueDate;
+    if (issueDate.isAfter(major, "week")) major = issueDate;
+  }
+  years[minor.year().toString()] = createYear(minor.toDate());
+  if (major.year() != minor.year()) {
+    years[major.year().toString()] = createYear(major.toDate());
+  }
   for (let index = 0; index < tasks.length; index++) {
     if (tasks[index].endDate && tasks[index].storyPoint) {
-      const issue =year[dayjs(tasks[index].endDate).week()-1]
+      const issue =
+        years[dayjs(tasks[index].endDate).year()][
+          dayjs(tasks[index].endDate).week() - 1
+        ];
       issue.total += tasks[index].storyPoint;
       issue.issues.push(tasks[index]);
     } else {
@@ -67,7 +55,7 @@ app.get("/tasks", async (req, res) => {
     }
   }
   let template = pug.compileFile("views/includes/task-items.pug");
-  let markup = template({ year, actual, unclasificated });
+  let markup = template({ years, actual, unclasificated });
   res.send(markup);
 });
 
