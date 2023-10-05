@@ -14,18 +14,18 @@ html(lang='en')
         p.text-5xl.text-center.mb-20.font-semibold.text-gray-600 Visualiza tus story points de una manera facil para saber tu rendmiento
         form(hx-get="/tasks", hx-target="#todo-list", hx-swap="innerHTML")
           .w-full
-            input(class="px-3 w-full py-2 mb-4 border-5 focus:border-rose-500" name="jiraUser",placeholder='Usuario en Jira', autofocus='')
+            input(class="px-3 w-full py-2 mb-4 border-5 focus:border-rose-500" name="jiraUser",placeholder='Usuario en Jira', autofocus='' required)
           .w-full
-            input(class="px-3 w-full py-2 mb-4 border-5 focus:border-rose-500" name="token",placeholder='Jira token', autofocus='')
+            input(class="px-3 w-full py-2 mb-4 border-5 focus:border-rose-500" name="token",placeholder='Jira token', autofocus='' required)
           .w-full
-            input(class="px-3 py-2 mb-4 w-full border-5 focus:border-rose-500" name="userId",placeholder='Jira userId a buscar', autofocus='')
+            input(class="px-3 py-2 mb-4 w-full border-5 focus:border-rose-500" name="userId",placeholder='Jira userId a buscar', autofocus='' required)
           .block.self-center.mb-4
             label.mr-1 1M
-            input(type="radio" name="months" value="1")
+            input(type="radio" name="months" value="1" required)
             label.ml-2.mr-1 2M
-            input(type="radio" name="months" value="2")
+            input(type="radio" name="months" value="2" required)
             label.ml-2.mr-1 3M
-            input(type="radio" name="months" value="3")
+            input(type="radio" name="months" value="3" required)
           button.px-5.py-2.bg-indigo-500.rounded-md.text-white.font-bold Buscar
       #todo-list
 
