@@ -6,12 +6,15 @@ html(lang='en')
     title My story points
     script(src="https://cdn.tailwindcss.com")
     link(rel='stylesheet' href='/css/index.css')
+    link(rel="icon" href="/img/logo.png" type="image/x-icon")
   body
     section
       header.w-full.bg-indigo-500.py-3.px-5.text-white.text-left
-        p.text-xl.font-bold My story points
+        a.text-xl.font-bold(href="https://github.com/arturxdev/mystorypoints") Repositorio
       div(class="w-2/3 mx-auto mt-10")
-        p.text-5xl.text-center.mb-20.font-semibold.text-gray-600 Visualiza tus story points de una manera facil para saber tu rendmiento
+        div(class="w-2/4 m-auto")
+          img(src="/img/logo-full.png")
+        p.mt-5.text-xl.text-center.mb-20.font-semibold.text-gray-600 Visualiza tus story points de una manera facil para saber tu rendmiento
         form(hx-get="/tasks", hx-target="#todo-list", hx-swap="innerHTML")
           .w-full
             input(class="px-3 w-full py-2 mb-4 border-5 focus:border-rose-500" name="jiraUser",placeholder='Usuario en Jira', autofocus='' required)
