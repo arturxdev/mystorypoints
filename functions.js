@@ -53,39 +53,45 @@ function semanasFaltantesParaFinDeAnio(fecha) {
 }
 module.exports = {
   getTasks: async (user, months, token, jiraUser) => {
-    const url = "https://koibanx.atlassian.net/rest/api/3/search";
-    const params = {
-      jql:
-        `assignee = ${user} AND created >= startOfMonth(-${months}M) AND created <= endOfMonth()`,
-      maxResults: 150,
-      // fields: "summary,description,customfield_xxxxx", // Reemplaza con el ID real de tu campo de Story Points
-      orderBy: "created DESC", // Ordenar por fecha de creación en orden descendente
-    };
-    const headers = {
-      "Authorization": `Basic ${
-        Buffer.from(
-          jiraUser + ":" + token,
-        ).toString("base64")
-      }`,
-      "Accept": "application/json",
-    };
-    const response = await axios({
-      method: "get",
-      url,
-      headers,
-      params,
-    });
-    const tasks = response.data.issues.map((issue) => {
-      return {
-        summary: issue.fields.summary,
-        storyPoint: issue.fields.customfield_10102,
-        key: issue.key,
-        startDate: issue.fields.customfield_10015,
-        endDate: issue.fields.customfield_10143,
-        resolution: issue.fields.status ? issue.fields.status.name : null,
+    try {
+      console.log(user,months)
+      const url = "https://koibanx.atlassian.net/rest/api/3/search";
+      const params = {
+        jql:
+          `assignee = ${user} AND created >= startOfMonth(-${months}M) AND created <= endOfMonth()`,
+        maxResults: 150,
+        // fields: "summary,description,customfield_xxxxx", // Reemplaza con el ID real de tu campo de Story Points
+        orderBy: "created DESC", // Ordenar por fecha de creación en orden descendente
       };
-    });
-    return tasks;
+      const headers = {
+        "Authorization": `Basic ${
+          Buffer.from(
+            jiraUser + ":" + token,
+          ).toString("base64")
+        }`,
+        "Accept": "application/json",
+      };
+      const response = await axios({
+        method: "get",
+        url,
+        headers,
+        params,
+      });
+      const tasks = response.data.issues.map((issue) => {
+        return {
+          summary: issue.fields.summary,
+          storyPoint: issue.fields.customfield_10102,
+          key: issue.key,
+          startDate: issue.fields.customfield_10015,
+          endDate: issue.fields.customfield_10143,
+          resolution: issue.fields.status ? issue.fields.status.name : null,
+        };
+      });
+      return tasks;
+    } catch (error) {
+      console.log(error.response.data);
+      throw new Error("Error al obtener datos")
+    }
   },
   createWeeksofMonth: (month, year) => {
     const numeroSemanas = obtenerCantidadDeSemanasEnMes(month, year);

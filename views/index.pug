@@ -7,7 +7,7 @@ html(lang='en')
     script(src="https://cdn.tailwindcss.com")
     link(rel='stylesheet' href='/css/index.css')
     link(rel="icon" href="/img/logo.png" type="image/x-icon")
-  body
+  body#todo-list
     section
       header.w-full.bg-indigo-500.py-3.px-5.text-white.text-left
         a.text-xl.font-bold(href="https://github.com/arturxdev/mystorypoints") Repositorio
@@ -15,22 +15,55 @@ html(lang='en')
         div(class="w-2/4 m-auto")
           img(src="/img/logo-full.png")
         p.mt-5.text-xl.text-center.mb-20.font-semibold.text-gray-600 Visualiza tus story points de una manera facil para saber tu rendmiento
-        form(hx-get="/tasks", hx-target="#todo-list", hx-swap="innerHTML")
+        form(hx-get="/", hx-target="#todo-list" hx-push-url="true")
           .w-full
-            input(class="px-3 w-full py-2 mb-4 border-5 focus:border-rose-500" name="jiraUser",placeholder='Usuario en Jira', autofocus='' required)
+            span Usuario de jira del token
+            input(class="px-3 w-full py-2 mb-4 border-5 focus:border-rose-500" name="jiraUser",placeholder='Usuario en Jira', autofocus='' required value=params.jiraUser)
           .w-full
-            input(class="px-3 w-full py-2 mb-4 border-5 focus:border-rose-500" name="token",placeholder='Jira token', autofocus='' required)
+            span Token
+            input(class="px-3 w-full py-2 mb-4 border-5 focus:border-rose-500" name="token",placeholder='Jira token', autofocus='' required value=params.token)
           .w-full
-            input(class="px-3 py-2 mb-4 w-full border-5 focus:border-rose-500" name="userId",placeholder='Jira userId a buscar', autofocus='' required)
+            span Usuario a buscar
+            input(class="px-3 py-2 mb-4 w-full border-5 focus:border-rose-500" name="userId",placeholder='Jira userId a buscar', autofocus='' required value=params.userId)
           .block.self-center.mb-4
             label.mr-1 1M
-            input(type="radio" name="months" value="1" required)
+            input(type="radio" name="months" value="1" required checked=params.months===1)
             label.ml-2.mr-1 2M
-            input(type="radio" name="months" value="2" required)
+            input(type="radio" name="months" value="2" required checked=params.months===2)
             label.ml-2.mr-1 3M
-            input(type="radio" name="months" value="3" required)
+            input(type="radio" name="months" value="3" required checked=params.months===3)
           button.px-5.py-2.bg-indigo-500.rounded-md.text-white.font-bold Buscar
-      #todo-list
+      div
+        p.text-lg.text-center.mt-8 La semana actual es #{actual}
+        p.text-lg.text-center Tareas sin clasificar #{unclasificated.length}
+        div.flex.justify-center.mt-2
+          each task in unclasificated
+            a.px-2.py-2.border.bg-yellow-200.ml-2.text-xs(href=`https://koibanx.atlassian.net/browse/${task.key}` target="_blank_") 
+              span #{task.key}
+              span.text-red-500.ml-2 #{task.storyPoint}
+        div(class="mx-auto w-5/6 flex justify-center mt-10")
+          table.w-full.table-auto.px-10
+            tr
+              th Año
+              th Numero Semana
+              th Fecha Inicio
+              th Fecha Final
+              th Story points
+              th Issues
+            each year,yearIndex in years
+              each week,weekIndex in year
+                tr(class=`${parseInt(weekIndex)+1===actual?"bg-indigo-100":""}`)
+                  td #{yearIndex} 
+                  td #{parseInt(weekIndex)+1} 
+                  td 
+                    p #{week.month.inicio} 
+                  td #{week.month.final} 
+                  td #{week.total}
+                  td.flex.flex-wrap
+                    each task in week.issues
+                      a.px-2.py-2.my-2.border.ml-2.text-xs.rounded-md(class=`${task.resolution==='Done'?"bg-green-300":"bg-orange-300"}` href=`https://koibanx.atlassian.net/browse/${task.key}` target="_blank_") 
+                        span #{task.key}
+                        span.font-bold.ml-2 #{task.storyPoint}
 
     script(src='https://unpkg.com/htmx.org@1.3.1')
     script(src='https://unpkg.com/hyperscript.org@0.0.5')
