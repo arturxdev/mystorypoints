@@ -36,7 +36,7 @@ html(lang='en')
       div
         p.text-lg.text-center.mt-8 La semana actual es #{actual}
         p.text-lg.text-center Tareas sin clasificar #{unclasificated.length}
-        div.flex.justify-center.mt-2
+        div.flex.justify-center.mt-2.flex-wrap
           each task in unclasificated
             a.px-2.py-2.border.bg-yellow-200.ml-2.text-xs(href=`https://koibanx.atlassian.net/browse/${task.key}` target="_blank_") 
               span #{task.key}
