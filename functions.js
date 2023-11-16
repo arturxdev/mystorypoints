@@ -80,11 +80,12 @@ module.exports = {
       const tasks = response.data.issues.map((issue) => {
         return {
           summary: issue.fields.summary,
-          storyPoint: issue.fields.customfield_10102,
+          storyPoint: issue.fields.customfield_10102 ??issue.fields.customfield_10016,
           key: issue.key,
           startDate: issue.fields.customfield_10015,
           endDate: issue.fields.customfield_10143,
           resolution: issue.fields.status ? issue.fields.status.name : null,
+          issueType: issue.fields.issuetype.name,
         };
       });
       return tasks;

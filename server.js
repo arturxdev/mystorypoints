@@ -19,7 +19,9 @@ app.use(express.static(path.join(__dirname, "assets")));
 
 app.get("/", async (req, res) => {
   let years = {};
-  const { userId, months, token, jiraUser } = req.query;
+  const { userId, months} = req.query;
+  const jiraUser ="arturo.guerrero@koibanx.com"
+  const token ="ATATT3xFfGF0rN-jBiYpEMTHTWDLppql0m3ORKyOtEko-yu5duJ2CEie0L65UIIqaDzMMKg8upIX3wbPXdGUGdKNe0GSZ4SHSxvSjKM_yvwOV6pCLI155mJXBGkBTCqkLHrdUytU591DQUA8Zm94BXSw7paylGjZXxkVlAi-MYp6m6uv0Qa6_Bc=487A155B"
   const actual = dayjs().week();
   let minor = dayjs();
   let major = dayjs();
