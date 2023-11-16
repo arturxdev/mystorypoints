@@ -5,6 +5,7 @@ const pug = require("pug");
 const bodyParser = require("body-parser");
 const path = require("path");
 const { getTasks, createYear } = require("./functions");
+require('dotenv').config()
 dayjs.extend(weekOfYear);
 
 const PORT = process.env.PORT || 3000;
@@ -21,7 +22,7 @@ app.get("/", async (req, res) => {
   let years = {};
   const { userId, months} = req.query;
   const jiraUser ="arturo.guerrero@koibanx.com"
-  const token ="ATATT3xFfGF0dJ4MpgSvCqvSzWKOUYSYFa0Npy2XNJmdIBaS0IKXjBaTivH1IEPkYZlpKj0d-oFsp3iOVFIPg9RBDW-d_U9hidDs6JoXgzngaZUlErClatYl9oMBw4LRdKRRaKFKxthmobuWFvN4reZ4JF_Uu21VIoR8Hm0pzXAK0ritwWHC-Bs=E7326D11"
+  const token =process.env.TOKEN_JIRA
   const actual = dayjs().week();
   let minor = dayjs();
   let major = dayjs();
