@@ -21,7 +21,7 @@ app.get("/", async (req, res) => {
   let years = {};
   const { userId, months} = req.query;
   const jiraUser ="arturo.guerrero@koibanx.com"
-  const token ="ATATT3xFfGF0HxoS3i0BlnKB1W1yLw8h4qoAtbkcaEW4BFp2JQbgXtof4KO4t4YfkVAnqS1fMRFSvK-VHpsAs1iodOxGls9gLn71Y4KjgXyvZfmJFzlooXRs2hH_Am1zrj2Rxff4TVBrKwkvPtfpmBNyySnpDv8d7b0otXbyJI1IbSTP6d07dxg=714516DD"
+  const token ="ATATT3xFfGF0dJ4MpgSvCqvSzWKOUYSYFa0Npy2XNJmdIBaS0IKXjBaTivH1IEPkYZlpKj0d-oFsp3iOVFIPg9RBDW-d_U9hidDs6JoXgzngaZUlErClatYl9oMBw4LRdKRRaKFKxthmobuWFvN4reZ4JF_Uu21VIoR8Hm0pzXAK0ritwWHC-Bs=E7326D11"
   const actual = dayjs().week();
   let minor = dayjs();
   let major = dayjs();
