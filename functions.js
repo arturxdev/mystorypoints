@@ -54,6 +54,8 @@ function semanasFaltantesParaFinDeAnio(fecha) {
 module.exports = {
   getTasks: async (user, months, token, jiraUser) => {
     try {
+      console.log(token)
+      console.log(jiraUser)
       console.log(user,months)
       const url = "https://koibanx.atlassian.net/rest/api/3/search";
       const params = {
