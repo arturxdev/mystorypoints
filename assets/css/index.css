@@ -1,8 +1,10 @@
 body {
-  background-color:#f3f4f6;
+  background-color:white;
 }
 
-
+.tag{
+  min-width: 220px;
+}
 tbody tr {
   background-color: white;
 }
@@ -15,4 +17,27 @@ thead tr th,tbody tr td{
 
 tbody tr:nth-child(even) {
   background-color: #f3f4f6;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 220px;
+  background-color: #f3f4f6;
+  color: black;
+  border-radius: 6px;
+  padding: 5px 5px;
+
+  /* Position the tooltip */
+  bottom:45px;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }
