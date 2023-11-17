@@ -33,15 +33,15 @@ html(lang='en')
         .flex.rounded-md.justify-between.px-5.py-5.bg-indigo-50.my-10
           div 
             p.mt-2 
-              span.font-medium Semana actual es : 
+              span.font-medium Semana actual: 
               span.text-indigo-500 #{actual}
             p 
-              span.font-medium Tareas sin clasificar : 
+              span.font-medium Tareas sin clasificar: 
               span.text-indigo-500 #{unclasificated.length}
           .self-center
             button.px-5.py-2.bg-indigo-500.rounded-md.text-white.font-bold.flex.items-center(onclick="location.reload()") 
               img.mr-1.inline-block(src="/img/icons/loop-left-line.svg" width="20px")
-              span Recargar
+              span Actualizar
         div.flex.justify-start.mt-2.flex-wrap
           each task in unclasificated
             .inline-block.bg-rose-200.border.border-rose-500.tag.px-2.py-2.border.rounded-md.mr-2.my-2.drop-shadow-lg.tooltip
