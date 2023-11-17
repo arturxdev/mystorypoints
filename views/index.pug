@@ -57,8 +57,8 @@ html(lang='en')
           table.w-full
             thead
               tr
-                th Año
                 th Semana
+                th Año
                 th Fecha Inicio
                 th Fecha Final
                 th Story points
@@ -67,8 +67,8 @@ html(lang='en')
               each year,yearIndex in years
                 each week,weekIndex in year
                   tr(class=`${parseInt(weekIndex)+1===actual?"bg-indigo-50":""}`)
-                    td.text-center #{yearIndex} 
                     td.text-center #{parseInt(weekIndex)+1} 
+                    td.text-center #{yearIndex} 
                     td.text-center 
                       p #{week.month.inicio} 
                     td.text-center #{week.month.final} 
