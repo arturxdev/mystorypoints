@@ -18,7 +18,7 @@ html(lang='en')
         form(hx-get="/", hx-target="#todo-list" hx-push-url="true")
           .w-full
             span Usuario a buscar
-            input(class="px-3 py-2 mb-4 w-full border-5 focus:border-rose-500" name="userId",placeholder='Jira userId a buscar', autofocus='' required value=params.userId)
+            input(class="px-3 py-2 mb-4 w-full border border-gray-300 rounded-md focus:border-rose-500" name="userId",placeholder='Jira userId a buscar' required value=params.userId)
           .block.self-center.mb-4
             label.mr-1 1M
             input(type="radio" name="months" value="1" required checked=params.months===1)
@@ -26,10 +26,22 @@ html(lang='en')
             input(type="radio" name="months" value="2" required checked=params.months===2)
             label.ml-2.mr-1 3M
             input(type="radio" name="months" value="3" required checked=params.months===3)
-          button.px-5.py-2.bg-indigo-500.rounded-md.text-white.font-bold Buscar
+          button.px-5.py-2.bg-indigo-500.rounded-md.text-white.font-bold.flex.items-center 
+            img.mr-1.inline-block(src="/img/icons/search-line.svg" width="20px")
+            span Buscar
       div(class="w-5/6 mx-auto mt-2")
-        p.text-lg.mt-8 La semana actual es #{actual}
-        p.text-lg Tareas sin clasificar #{unclasificated.length}
+        .flex.rounded-md.justify-between.px-5.py-5.bg-indigo-50.my-10
+          div 
+            p.mt-2 
+              span.font-medium Semana actual es : 
+              span.text-indigo-500 #{actual}
+            p 
+              span.font-medium Tareas sin clasificar : 
+              span.text-indigo-500 #{unclasificated.length}
+          .self-center
+            button.px-5.py-2.bg-indigo-500.rounded-md.text-white.font-bold.flex.items-center(onclick="location.reload()") 
+              img.mr-1.inline-block(src="/img/icons/loop-left-line.svg" width="20px")
+              span Recargar
         div.flex.justify-start.mt-2.flex-wrap
           each task in unclasificated
             .inline-block.bg-rose-200.border.border-rose-500.tag.px-2.py-2.border.rounded-md.mr-2.my-2.drop-shadow-lg.tooltip
@@ -41,7 +53,7 @@ html(lang='en')
                   span.mr-2 #{task.issueType}
                   span.mr-2(class=`${task.endDate ? "":"text-red-500"}`) endDate
                   span.mr-2(class=`${task.storyPoint ? "":"text-red-500"}`) storyPoints
-        div(class="mx-auto w-full flex justify-center mt-10")
+        div(class="mx-auto w-full flex justify-center my-10")
           table.w-full
             thead
               tr

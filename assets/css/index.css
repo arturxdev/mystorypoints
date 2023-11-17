@@ -5,19 +5,46 @@ body {
 .tag{
   min-width: 220px;
 }
-tbody tr {
-  background-color: white;
+/* tbody tr { */
+/*   background-color: white; */
+/* } */
+/* thead tr { */
+/*   background-color: white; */
+/* } */
+/* thead tr th,tbody tr td{ */
+/*     border:1px solid #D0d5dd; */
+/* } */
+/**/
+/* tbody tr:nth-child(even) { */
+/*   background-color: #f3f4f6; */
+/* } */
+
+table {
+	border: 1px solid red;
 }
-thead tr {
-  background-color: white;
-}
-thead tr th,tbody tr td{
-    border:1px solid #D0d5dd;
+thead th {
+	border-bottom: 1px solid #6b7280;
+        border-color: inherit;
 }
 
+tbody td {
+  min-height: 65px;
+        padding: 5px 2px;
+	border-top: 1px solid #6b7280;
+	border-right: 1px solid #6b7280;
+        border-color: inherit;
+}
 tbody tr:nth-child(even) {
   background-color: #f3f4f6;
 }
+
+tbody tr:first-child td {
+	border-top: 0;
+}
+tbody td:last-child {
+	border-right: 0;
+}
+
 
 .tooltip {
   position: relative;
