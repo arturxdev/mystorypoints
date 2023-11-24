@@ -4,8 +4,9 @@ module.exports = {
     try {
       console.log(user, months);
       const url = "https://koibanx.atlassian.net/rest/api/3/search";
+      console.log(user);
       const params = {
-        jql: `assignee = ${user} AND created >= startOfMonth(-3M) AND created <= endOfMonth()`,
+        jql: `assignee = "${user}" AND created >= startOfMonth(-3M) AND created <= endOfMonth()`,
         maxResults: 250,
         orderBy: "created DESC",
       };
