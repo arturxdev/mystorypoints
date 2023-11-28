@@ -18,12 +18,20 @@ module.exports = {
     return { minor, major };
   },
   genCal(dateStart, dateEnd) {
+    const calStart =
+      dateStart.getDay() === 0
+        ? dateStart
+        : dateStart.setDate(dateStart.getDate() - dateStart.getDay() + 1);
+    const calEnd =
+      dateStart.getDay() === 6
+        ? dateEnd
+        : dateEnd.setDate(dateEnd.getDate() + (6 - dateEnd.getDay()));
     const weeksArray = [];
 
     let currentWeek = [];
-    let currentDate = new Date(dateStart);
+    let currentDate = new Date(calStart);
 
-    while (currentDate <= dateEnd) {
+    while (currentDate <= calEnd) {
       const weekDay = currentDate.getDay();
 
       if (weekDay === 0 && currentWeek.length > 0) {

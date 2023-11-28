@@ -1,7 +1,9 @@
 body {
   background-color: white;
 }
-
+th {
+  white-space: nowrap;
+}
 .tag {
   min-width: 220px;
 }
@@ -14,7 +16,10 @@ thead th {
   border-bottom: 1px solid #6b7280;
   border-color: inherit;
 }
-
+td,
+th {
+  padding: 5px 8px;
+}
 tbody td {
   min-height: 65px;
   padding: 5px 2px;
