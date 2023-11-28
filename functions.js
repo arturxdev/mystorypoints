@@ -48,7 +48,7 @@ module.exports = {
     }
     let cal = {};
     for (let index = 0; index < weeksArray.length; index++) {
-      const firstDayOfWeek = weeksArray[index][0];
+      const firstDayOfWeek = weeksArray[index][1];
       const year = firstDayOfWeek.getFullYear();
       const weekNumber = getWeekNumber(firstDayOfWeek);
       const lastDayOfWeek = weeksArray[index][weeksArray[index].length - 1];

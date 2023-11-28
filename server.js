@@ -29,9 +29,13 @@ app.get("/", async (req, res) => {
   if (userId && months && token && jiraUser) {
     const tasks = await getTasks(userId, months, token, jiraUser);
     const { minor, major } = getMinMaxDates(tasks);
-    cal = genCal(minor.subtract(2, "week").toDate(), major.toDate());
+    cal = genCal(
+      minor.subtract(2, "week").toDate(),
+      major.add(1, "week").toDate(),
+    );
     for (let index = 0; index < tasks.length; index++) {
       if (tasks[index].endDate && tasks[index].storyPoint) {
+        console.log(tasks[index].endDate);
         const issue =
           cal[
             `${dayjs(tasks[index].endDate).year()}-${dayjs(
