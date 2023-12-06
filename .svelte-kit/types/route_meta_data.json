@@ -1,0 +1,11 @@
+{
+	"/": [
+		"src/routes/+page.server.ts"
+	],
+	"/register": [
+		"src/routes/register/+page.server.ts"
+	],
+	"/[userId]": [
+		"src/routes/[userId]/+page.server.ts"
+	]
+}
