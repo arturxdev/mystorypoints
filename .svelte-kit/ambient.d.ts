@@ -33,6 +33,7 @@ declare module '$env/static/private' {
 	export const TMUX: string;
 	export const LC_TIME: string;
 	export const USER: string;
+	export const npm_package_dependencies__sveltejs_adapter_node: string;
 	export const npm_config_version_commit_hooks: string;
 	export const npm_config_user_agent: string;
 	export const npm_config_bin_links: string;
@@ -200,6 +201,7 @@ declare module '$env/dynamic/private' {
 		TMUX: string;
 		LC_TIME: string;
 		USER: string;
+		npm_package_dependencies__sveltejs_adapter_node: string;
 		npm_config_version_commit_hooks: string;
 		npm_config_user_agent: string;
 		npm_config_bin_links: string;
