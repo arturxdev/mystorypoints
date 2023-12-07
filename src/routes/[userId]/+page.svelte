@@ -7,6 +7,9 @@
 	}
 	let userId = payload.userId;
 	let months = payload.months;
+  let issueType = payload.tasks.issueTypes
+  $: filteredUnclasificatedTasks = payload.tasks.unclasificated.filter(task => issueType.includes(task.issueType))
+  console.log(payload);
 </script>
 
 <header class="w-full bg-indigo-500 py-3 px-5 text-white flex items-center justify-between">
@@ -50,9 +53,19 @@
 		</button>
 	</form>
 	{#if payload.tasks.success}
+    <div>
+    </div>
 		<div class="flex rounded-md justify-between px-5 py-5 bg-indigo-50 my-10">
 			<div>
 				<p class="mt-2">
+          <img class="rounded-full" src={payload.user.avatarUrls["32x32"]} alt="avatar img">
+				</p>
+				<p class="mt-2">
+					<span class="font-medium">Usuario: </span><span class="text-indigo-500"
+						>{payload.user.displayName}</span
+					>
+				</p>
+				<p>
 					<span class="font-medium">Semana actual: </span><span class="text-indigo-500"
 						>{payload.tasks.actual}</span
 					>
@@ -71,8 +84,14 @@
 				>
 			</div>
 		</div>
+    <div>
+      <p>Tipos de tareas</p>
+			{#each payload.tasks.issueTypes as type}
+        <label class="mr-2 "><input type="checkbox" bind:group={issueType} value={type}/> {type}</label> 
+      {/each}
+    </div>
 		<div class="flex justify-start mt-2 flex-wrap">
-			{#each payload.tasks.unclasificated as task}
+			{#each filteredUnclasificatedTasks as task}
 				<div class="inline-block tag-danger tooltip">
 					<span class="tooltiptext">{task.summary}</span>
 					<a href="https://koibanx.atlassian.net/browse/{task.key}" target="_blank_">
