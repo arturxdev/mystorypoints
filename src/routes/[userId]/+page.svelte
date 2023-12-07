@@ -130,6 +130,8 @@
 									<div class="inline-block tooltip">
 										<span class="tooltiptext">{issue.summary} </span>
 										<a
+                      target="_blank_"
+                      href="https://koibanx.atlassian.net/browse/{issue.key}"
 											class={issue.resolution === 'Done' || issue.resolution === 'Finalizado'
 												? 'tooltip tag-success'
 												: 'tooltip tag-warning'}
