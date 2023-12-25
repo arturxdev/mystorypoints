@@ -1,6 +1,15 @@
+"use client";
+import Image from "next/image";
 import { useRouter } from "next/router";
+
 import { useState, useEffect } from "react";
-export default function Table({ data, user }: { data: any; user: any }) {
+export default function Table({
+  data = { issueTypes: [], unclasificated: [], cal: {}, actual: "" },
+  user = {},
+}: {
+  data: any;
+  user: any;
+}) {
   const router = useRouter();
   const [issueType, setIssueType] = useState<string[]>([]);
   const [unclasificated, setUnclasificated] = useState<any[]>([]);
@@ -26,7 +35,7 @@ export default function Table({ data, user }: { data: any; user: any }) {
         issueType.includes(task.issueType),
       ),
     );
-  }, [issueType]);
+  }, [issueType, data]);
   useEffect(() => {
     setIssueType(data.issueTypes);
     setUnclasificated(data.unclasificated);
@@ -37,15 +46,17 @@ export default function Table({ data, user }: { data: any; user: any }) {
         <div className="flex rounded-md justify-between px-5 py-5 bg-indigo-50 my-10">
           <div>
             <p className="mt-2">
-              <img
+              <Image
+                width="32"
+                height="32"
                 className="rounded-full"
-                src={user.avatarUrls["32x32"]}
+                src={user.img}
                 alt="avatar img"
               />
             </p>
             <p className="mt-2">
               <span className="font-medium">Usuario: </span>
-              <span className="text-indigo-500">{user.displayName}</span>
+              <span className="text-indigo-500">{user.name}</span>
             </p>
             <p>
               <span className="font-medium">Semana actual: </span>
@@ -63,10 +74,12 @@ export default function Table({ data, user }: { data: any; user: any }) {
               className="btn-primary flex items-center"
               onClick={handleRefresh}
             >
-              <img
+              <Image
                 className="mr-1 inline-block"
                 src="/icons/loop-left-line.svg"
-                width="20px"
+                width="20"
+                height="20"
+                alt="icon"
               />
               <span>Actualizar</span>
             </button>

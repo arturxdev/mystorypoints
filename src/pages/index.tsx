@@ -106,7 +106,13 @@ export default function Home() {
         </form>
       </div>
       {user.status && data.status ? (
-        <Table data={data.data} user={user.data} />
+        <Table
+          data={data.data}
+          user={{
+            img: user.data.avatarUrls["32x32"],
+            name: user.data.displayName,
+          }}
+        />
       ) : (
         <> </>
       )}
