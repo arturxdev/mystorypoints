@@ -114,7 +114,18 @@ export default function Home() {
           }}
         />
       ) : (
-        <> </>
+        <div className="w-5/6 mx-auto mt-10 text-center">
+          <div className="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
       )}
     </main>
   );

@@ -3,13 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 import { useState, useEffect } from "react";
-export default function Table({
-  data = { issueTypes: [], unclasificated: [], cal: {}, actual: "" },
-  user = {},
-}: {
-  data: any;
-  user: any;
-}) {
+export default function Table({ data, user = {} }: { data: any; user: any }) {
   const router = useRouter();
   const [issueType, setIssueType] = useState<string[]>([]);
   const [unclasificated, setUnclasificated] = useState<any[]>([]);
@@ -30,15 +24,19 @@ export default function Table({
     }
   }
   useEffect(() => {
-    setUnclasificated(
-      data.unclasificated.filter((task: any) =>
-        issueType.includes(task.issueType),
-      ),
-    );
+    if (data) {
+      setUnclasificated(
+        data?.unclasificated.filter((task: any) =>
+          issueType.includes(task.issueType),
+        ),
+      );
+    }
   }, [issueType, data]);
   useEffect(() => {
-    setIssueType(data.issueTypes);
-    setUnclasificated(data.unclasificated);
+    if (data) {
+      setIssueType(data.issueTypes);
+      setUnclasificated(data.unclasificated);
+    }
   }, [data]);
   return (
     <>
@@ -60,12 +58,12 @@ export default function Table({
             </p>
             <p>
               <span className="font-medium">Semana actual: </span>
-              <span className="text-indigo-500">{data.actual}</span>
+              <span className="text-indigo-500">{data?.actual}</span>
             </p>
             <p>
               <span className="font-medium">Tareas sin clasificar: </span>
               <span className="text-indigo-500">
-                {data.unclasificated.length}
+                {data?.unclasificated.length}
               </span>
             </p>
           </div>
@@ -88,7 +86,7 @@ export default function Table({
       </div>
       <div className="w-5/6 mx-auto mt-2">
         <p>Tipos de tareas</p>
-        {data.issueTypes.map((item: any, index: any) => (
+        {data?.issueTypes.map((item: any, index: any) => (
           <label className="mr-2" key={index}>
             <input
               className="mr-1"
@@ -136,43 +134,44 @@ export default function Table({
               </tr>
             </thead>
             <tbody>
-              {Object.entries(data.cal).map((key, index) => (
-                <tr
-                  key={index}
-                  className={
-                    data.cal[key[0]].week === data.actual
-                      ? "!bg-indigo-100"
-                      : ""
-                  }
-                >
-                  <td className="text-center">{data.cal[key[0]].week}</td>
-                  <td className="text-center">{data.cal[key[0]].start}</td>
-                  <td className="text-center">{data.cal[key[0]].end}</td>
-                  <td className="text-center">{data.cal[key[0]].total}</td>
-                  <td>
-                    {data.cal[key[0]].issues.map((issue: any, index: any) => (
-                      <div className="inline-block tooltip" key={index}>
-                        <span className="tooltiptext">{issue.summary} </span>
-                        <a
-                          target="_blank_"
-                          href={`https://koibanx.atlassian.net/browse/${issue.key}`}
-                          className={
-                            issue.resolution === "Done" ||
-                            issue.resolution === "Finalizado"
-                              ? "tooltip tag-success"
-                              : "tooltip tag-warning"
-                          }
-                        >
-                          <p>
-                            <span className="font-semibold">{issue.key}</span>
-                            <span>{issue.storyPoint}</span>
-                          </p>
-                        </a>
-                      </div>
-                    ))}
-                  </td>
-                </tr>
-              ))}
+              {data &&
+                Object.entries(data?.cal).map((key, index) => (
+                  <tr
+                    key={index}
+                    className={
+                      data?.cal[key[0]].week === data.actual
+                        ? "!bg-indigo-100"
+                        : ""
+                    }
+                  >
+                    <td className="text-center">{data.cal[key[0]].week}</td>
+                    <td className="text-center">{data.cal[key[0]].start}</td>
+                    <td className="text-center">{data.cal[key[0]].end}</td>
+                    <td className="text-center">{data.cal[key[0]].total}</td>
+                    <td>
+                      {data.cal[key[0]].issues.map((issue: any, index: any) => (
+                        <div className="inline-block tooltip" key={index}>
+                          <span className="tooltiptext">{issue.summary} </span>
+                          <a
+                            target="_blank_"
+                            href={`https://koibanx.atlassian.net/browse/${issue.key}`}
+                            className={
+                              issue.resolution === "Done" ||
+                              issue.resolution === "Finalizado"
+                                ? "tooltip tag-success"
+                                : "tooltip tag-warning"
+                            }
+                          >
+                            <p>
+                              <span className="font-semibold">{issue.key}</span>
+                              <span>{issue.storyPoint}</span>
+                            </p>
+                          </a>
+                        </div>
+                      ))}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
