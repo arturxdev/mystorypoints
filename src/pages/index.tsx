@@ -2,6 +2,9 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+// useRouter
+import { useRouter } from 'next/navigation'
+
 import Table from "./table";
 
 async function getData(userId: string | null) {
@@ -14,19 +17,33 @@ async function getUser(userId: string | null) {
 }
 
 export default function Home() {
-  const onOptionChange = (e: any) => {
-    setMonths(e.target.value);
-  };
+  const router = useRouter()
+  const searchParams = useSearchParams();
   const [data, setData] = useState<any>({ status: false });
   const [user, setUser] = useState<any>({ status: false });
   const [months, setMonths] = useState<number>(1);
   const [userId, setUserId] = useState<string>("");
-  const searchParams = useSearchParams();
   const userIdQuery = searchParams.get("userId");
+
+  const onOptionChange = (e: any) => {
+    setMonths(e.target.value);
+  };
+
+  const handleForm = async (e: any) => {
+    e.preventDefault()
+    const formData = new FormData(e.target)
+    const userId = formData.get('userId')
+    try {
+      router.push(`/?userId=${userId}&months=2`, { scroll: false })
+      router.refresh()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     if (userIdQuery) {
-      setUserId(userIdQuery);
-      console.log("userIdQuery", userIdQuery);
+      setUserId(userIdQuery ?? "")
       getData(userIdQuery).then((res) => setData(res.data));
       getUser(userIdQuery).then((res) => setUser(res.data));
     }
@@ -57,7 +74,7 @@ export default function Home() {
         </p>
       </div>
       <div className="w-5/6 mx-auto mt-2">
-        <form action="?/tasks" method="POST">
+        <form onSubmit={handleForm}>
           <div className="w-full">
             <span>Usuario a buscar</span>
             <input
@@ -68,32 +85,32 @@ export default function Home() {
               placeholder="Jira userId a buscar"
             />
           </div>
-          <div className="block self-center mb-4">
-            <label className="mr-1">1M</label>
-            <input
-              type="radio"
-              name="months"
-              value="1"
-              onChange={onOptionChange}
-              required
-            />
-            <label className="ml-2 mr-1">2M</label>
-            <input
-              type="radio"
-              name="months"
-              value="2"
-              onChange={onOptionChange}
-              required
-            />
-            <label className="ml-2 mr-1">3M</label>
-            <input
-              type="radio"
-              name="months"
-              value="3"
-              onChange={onOptionChange}
-              required
-            />
-          </div>
+          {/* <div className="block self-center mb-4"> */}
+          {/*   <label className="mr-1">1M</label> */}
+          {/*   <input */}
+          {/*     type="radio" */}
+          {/*     name="months" */}
+          {/*     value="1" */}
+          {/*     onChange={onOptionChange} */}
+          {/*     required */}
+          {/*   /> */}
+          {/*   <label className="ml-2 mr-1">2M</label> */}
+          {/*   <input */}
+          {/*     type="radio" */}
+          {/*     name="months" */}
+          {/*     value="2" */}
+          {/*     onChange={onOptionChange} */}
+          {/*     required */}
+          {/*   /> */}
+          {/*   <label className="ml-2 mr-1">3M</label> */}
+          {/*   <input */}
+          {/*     type="radio" */}
+          {/*     name="months" */}
+          {/*     value="3" */}
+          {/*     onChange={onOptionChange} */}
+          {/*     required */}
+          {/*   /> */}
+          {/* </div> */}
           <button className="btn-primary flex items-center" type="submit">
             <img
               className="mr-1 inline-block"
@@ -105,28 +122,33 @@ export default function Home() {
           </button>
         </form>
       </div>
-      {user.status && data.status ? (
-        <Table
-          data={data.data}
-          user={{
-            img: user.data.avatarUrls["32x32"],
-            name: user.data.displayName,
-          }}
-        />
-      ) : (
-        <div className="w-5/6 mx-auto mt-10 text-center">
-          <div className="lds-roller">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-        </div>
-      )}
+      {(() => {
+        console.log("el if", userIdQuery)
+        if (userIdQuery) {
+          if (user.status && data.status) {
+            return <Table
+              data={data.data}
+              user={{
+                img: user.data.avatarUrls["32x32"],
+                name: user.data.displayName,
+              }}
+            />
+          } else {
+            return <div className="w-5/6 mx-auto mt-10 text-center">
+              <div className="lds-roller">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </div>
+          }
+        }
+      })()}
     </main>
   );
 }
