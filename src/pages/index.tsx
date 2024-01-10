@@ -34,8 +34,9 @@ export default function Home() {
     const formData = new FormData(e.target)
     const userId = formData.get('userId')
     try {
+      setData({ status: false })
+      setUser({ status: false })
       router.push(`/?userId=${userId}&months=2`, { scroll: false })
-      router.refresh()
     } catch (error) {
       console.log(error)
     }
@@ -123,7 +124,6 @@ export default function Home() {
         </form>
       </div>
       {(() => {
-        console.log("el if", userIdQuery)
         if (userIdQuery) {
           if (user.status && data.status) {
             return <Table
