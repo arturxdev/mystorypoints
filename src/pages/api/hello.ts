@@ -78,7 +78,7 @@ async function getTaskJira(
   const token = process.env.TOKEN_JIRA;
   const url = "https://koibanx.atlassian.net/rest/api/3/search";
   const params = {
-    jql: `assignee = "${userId}" AND created >= startOfMonth(-3M) AND created <= endOfMonth()`,
+    jql: `assignee = "${userId}" AND created >= startOfMonth(-6M) AND created <= endOfMonth()`,
     startAt,
     maxResults: 100,
   };
@@ -136,9 +136,9 @@ async function getTasks(months: string, userId: string) {
       if (tasks[index].endDate && tasks[index].storyPoint) {
         const issue =
           cal[
-            `${dayjs(tasks[index].endDate).year()}-${dayjs(
-              tasks[index].endDate,
-            ).week()}`
+          `${dayjs(tasks[index].endDate).year()}-${dayjs(
+            tasks[index].endDate,
+          ).week()}`
           ];
         issue.total += tasks[index].storyPoint;
         issue.issues.push(tasks[index]);
