@@ -103,7 +103,7 @@ export default function Table({ data, user = {} }: { data: any; user: any }) {
             <div className="inline-block tag-danger tooltip" key={index}>
               <span className="tooltiptext">{task.summary}</span>
               <a
-                href="https://koibanx.atlassian.net/browse/{task.key}"
+                href={`https://koibanx.atlassian.net/browse/${task.key}`}
                 target="_blank_"
               >
                 <p>
@@ -157,7 +157,7 @@ export default function Table({ data, user = {} }: { data: any; user: any }) {
                             href={`https://koibanx.atlassian.net/browse/${issue.key}`}
                             className={
                               issue.resolution === "Done" ||
-                              issue.resolution === "Finalizado"
+                                issue.resolution === "Finalizado"
                                 ? "tooltip tag-success"
                                 : "tooltip tag-warning"
                             }
