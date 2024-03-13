@@ -157,6 +157,7 @@ export default function Table({ data, user = {} }: { data: any; user: any }) {
                             href={`https://koibanx.atlassian.net/browse/${issue.key}`}
                             className={
                               issue.resolution === "Done" ||
+                                issue.resolution === "Finalizada" ||
                                 issue.resolution === "Finalizado"
                                 ? "tooltip tag-success"
                                 : "tooltip tag-warning"
@@ -164,7 +165,7 @@ export default function Table({ data, user = {} }: { data: any; user: any }) {
                           >
                             <p>
                               <span className="font-semibold">{issue.key}</span>
-                              <span>{issue.storyPoint}</span>
+                              <span> {issue.storyPoint}</span>
                             </p>
                           </a>
                         </div>
