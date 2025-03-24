@@ -5,11 +5,14 @@ import axios from "axios";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 dayjs.extend(weekOfYear);
 
-function getWeekNumber(date: any) {
-  const firstDayOfYear: any = new Date(date.getFullYear(), 0, 1);
-  const millisecondsPerDay: any = 24 * 60 * 60 * 1000;
-  const diff = (date - firstDayOfYear) / millisecondsPerDay;
-  return Math.ceil((diff + firstDayOfYear.getDay() + 1) / 7);
+function getWeekNumber(date: Date): number {
+  const d = new Date(
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+  );
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
 }
 // place files you want to import through the `$lib` alias in this folder.
 function getMinMaxDates(tasks: any) {
@@ -23,56 +26,99 @@ function getMinMaxDates(tasks: any) {
   }
   return { minor, major };
 }
-function genCal(dateStart: any, dateEnd: any) {
-  const calStart =
-    dateStart.getDay() === 0
-      ? dateStart
-      : dateStart.setDate(dateStart.getDate() - dateStart.getDay() + 1);
-  const calEnd =
-    dateStart.getDay() === 6
-      ? dateEnd
-      : dateEnd.setDate(dateEnd.getDate() + (6 - dateEnd.getDay()));
+function genCal(monthsToShow: number = 12) {
+  // Get current date
+  const dateEnd = new Date();
+  // Calculate start date by subtracting months and setting to first day of that month
+  const dateStart = new Date();
+  dateStart.setMonth(dateStart.getMonth() - (monthsToShow - 1));
+  dateStart.setDate(1); // Set to first day of the month
+
+  // Adjust start date to the beginning of the week (Monday)
+  const calStart = new Date(dateStart);
+  calStart.setDate(calStart.getDate() - calStart.getDay() + 1);
+  if (calStart.getDay() === 0) {
+    calStart.setDate(calStart.getDate() - 6); // If Sunday, go back to previous Monday
+  }
+
+  // Adjust end date to the end of the week (Sunday)
+  const calEnd = new Date(dateEnd);
+  if (calEnd.getDay() !== 6) {
+    calEnd.setDate(calEnd.getDate() + (6 - calEnd.getDay()));
+  }
+
+  // Generate array of weeks
   const weeksArray = [];
-
   let currentWeek = [];
-  let currentDate = new Date(calStart);
+  const currentDate = new Date(calStart);
 
+  // Iterate through all dates from start to end
   while (currentDate <= calEnd) {
-    const weekDay = currentDate.getDay();
-
-    if (weekDay === 0 && currentWeek.length > 0) {
+    // If it's Monday and we already have days in the current week, start a new week
+    if (currentDate.getDay() === 1 && currentWeek.length > 0) {
       weeksArray.push(currentWeek);
       currentWeek = [];
     }
 
+    // Add the current date to the current week
     currentWeek.push(new Date(currentDate));
     currentDate.setDate(currentDate.getDate() + 1);
   }
 
+  // Add the last week if it has any days
   if (currentWeek.length > 0) {
     weeksArray.push(currentWeek);
   }
-  let cal: any = {};
-  for (let index = 0; index < weeksArray.length; index++) {
-    const firstDayOfWeek = weeksArray[index][1];
-    const year = firstDayOfWeek.getFullYear();
-    const weekNumber = getWeekNumber(firstDayOfWeek);
-    const lastDayOfWeek = weeksArray[index][weeksArray[index].length - 1];
-    cal[`${year}-${weekNumber}`] = {
+
+  // Create calendar object with week information
+  const calendar: any = {};
+
+  weeksArray.forEach((week) => {
+    const firstDayOfWeek = week[0];
+    const thursdayOfWeek = new Date(firstDayOfWeek);
+    thursdayOfWeek.setDate(
+      firstDayOfWeek.getDate() + (4 - firstDayOfWeek.getDay())
+    );
+
+    const year = thursdayOfWeek.getFullYear();
+    const weekNumber = getWeekNumber(thursdayOfWeek);
+    const lastDayOfWeek = week[week.length - 1];
+
+    // Format dates as YYYY-MM-DD
+    const formatDate = (date: Date) => date.toISOString().split("T")[0];
+
+    // Create week entry in calendar
+    calendar[`${year}-${weekNumber}`] = {
       year,
       week: weekNumber,
-      start: firstDayOfWeek.toISOString().split("T")[0],
-      end: lastDayOfWeek.toISOString().split("T")[0],
-      days: weeksArray[index].map((day) => day.toISOString().split("T")[0]),
+      start: formatDate(firstDayOfWeek),
+      end: formatDate(lastDayOfWeek),
+      days: week.map(formatDate),
       total: 0,
       issues: [],
     };
-  }
-  return cal;
+  });
+
+  // Sort the calendar by date (most recent first)
+  const sortedCalendar: any = {};
+  Object.keys(calendar)
+    .sort((a, b) => {
+      const [yearA, weekA] = a.split("-").map(Number);
+      const [yearB, weekB] = b.split("-").map(Number);
+      if (yearA !== yearB) {
+        return yearB - yearA; // Sort by year descending
+      }
+      return weekB - weekA; // Sort by week descending
+    })
+    .forEach((key) => {
+      sortedCalendar[key] = calendar[key];
+    });
+
+  return sortedCalendar;
 }
 async function getTaskJira(
   userId: string | undefined | null,
-  startAt: number = 0,
+  startAt: number = 0
 ) {
   const jiraUser = "arturo.guerrero@koibanx.com";
   const token = process.env.TOKEN_JIRA;
@@ -84,7 +130,7 @@ async function getTaskJira(
   };
   const headers = {
     Authorization: `Basic ${Buffer.from(jiraUser + ":" + token).toString(
-      "base64",
+      "base64"
     )}`,
     Accept: "application/json",
   };
@@ -127,19 +173,22 @@ async function getTasks(months: string, userId: string) {
       };
     });
     const { minor, major } = getMinMaxDates(tasks);
-    cal = genCal(
-      minor.subtract(2, "week").toDate(),
-      major.add(1, "week").toDate(),
-    );
+    cal = genCal(12);
     let issueTypes: string[] = [];
     for (let index = 0; index < tasks.length; index++) {
       if (tasks[index].endDate && tasks[index].storyPoint) {
         const issue =
           cal[
-          `${dayjs(tasks[index].endDate).year()}-${dayjs(
-            tasks[index].endDate,
-          ).week()}`
+            `${dayjs(tasks[index].endDate).year()}-${dayjs(
+              tasks[index].endDate
+            ).week()}`
           ];
+        console.log(
+          `${dayjs(tasks[index].endDate).year()}-${dayjs(
+            tasks[index].endDate
+          ).week()}`
+        );
+        // console.log(issue);
         issue.total += tasks[index].storyPoint;
         issue.issues.push(tasks[index]);
       } else {
@@ -150,7 +199,7 @@ async function getTasks(months: string, userId: string) {
     }
     return { status: true, data: { actual, cal, unclasificated, issueTypes } };
   } catch (error: any) {
-    console.log(error.response.data);
+    console.log(error);
     return { status: false, error: "error on load data" };
   }
 }
@@ -163,7 +212,7 @@ type DataFail = { status: boolean; error: string };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<DataSuccess | DataFail>,
+  res: NextApiResponse<DataSuccess | DataFail>
 ) {
   try {
     if (req.query.userId == "null") {
@@ -173,7 +222,7 @@ export default async function handler(
     }
     const data = await getTasks(
       req.query.months as string,
-      req.query.userId as string,
+      req.query.userId as string
     );
     res.status(200).json(data);
   } catch (error) {
