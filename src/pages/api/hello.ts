@@ -176,18 +176,13 @@ async function getTasks(months: string, userId: string) {
     cal = genCal(12);
     let issueTypes: string[] = [];
     for (let index = 0; index < tasks.length; index++) {
-      if (tasks[index].endDate && tasks[index].storyPoint) {
+      if (tasks[index].endDate) {
         const issue =
           cal[
             `${dayjs(tasks[index].endDate).year()}-${dayjs(
               tasks[index].endDate
             ).week()}`
           ];
-        console.log(
-          `${dayjs(tasks[index].endDate).year()}-${dayjs(
-            tasks[index].endDate
-          ).week()}`
-        );
         // console.log(issue);
         issue.total += tasks[index].storyPoint;
         issue.issues.push(tasks[index]);

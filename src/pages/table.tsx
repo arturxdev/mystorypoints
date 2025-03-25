@@ -27,8 +27,8 @@ export default function Table({ data, user = {} }: { data: any; user: any }) {
     if (data) {
       setUnclasificated(
         data?.unclasificated.filter((task: any) =>
-          issueType.includes(task.issueType),
-        ),
+          issueType.includes(task.issueType)
+        )
       );
     }
   }, [issueType, data]);
@@ -157,15 +157,15 @@ export default function Table({ data, user = {} }: { data: any; user: any }) {
                             href={`https://koibanx.atlassian.net/browse/${issue.key}`}
                             className={
                               issue.resolution === "Done" ||
-                                issue.resolution === "Finalizada" ||
-                                issue.resolution === "Finalizado"
+                              issue.resolution === "Finalizada" ||
+                              issue.resolution === "Finalizado"
                                 ? "tooltip tag-success"
                                 : "tooltip tag-warning"
                             }
                           >
                             <p>
                               <span className="font-semibold">{issue.key}</span>
-                              <span> {issue.storyPoint}</span>
+                              <span> {issue.storyPoint ?? "-"}</span>
                             </p>
                           </a>
                         </div>
